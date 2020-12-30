@@ -1,33 +1,58 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-      <router-link to="/antd">Antd</router-link>
-    </div>
-    <router-view />
-  </div>
+  <a-layout id="components-layout-demo-side" style="min-height: 100vh">
+    <a-layout-sider v-model="collapsed" collapsible>
+      <div class="logo" />
+      <a-menu theme="dark" :default-selected-keys="['1']" mode="inline">
+        <a-menu-item key="1" @click="$router.replace('/')">
+          <a-icon type="pie-chart" />
+          <span>Dashboard</span>
+        </a-menu-item>
+        <a-sub-menu key="sub1">
+          <span slot="title"><a-icon type="user" /><span>User</span></span>
+          <a-menu-item key="3"> Tom </a-menu-item>
+          <a-menu-item key="4"> Bill </a-menu-item>
+          <a-menu-item key="5"> Alex </a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu key="sub2">
+          <span slot="title"><a-icon type="team" /><span>Team</span></span>
+          <a-menu-item key="6"> Team 1 </a-menu-item>
+          <a-menu-item key="8"> Team 2 </a-menu-item>
+        </a-sub-menu>
+        <a-menu-item key="9" @click="$router.push('/about')">
+          <a-icon type="file" />
+          <span>File</span>
+        </a-menu-item>
+      </a-menu>
+    </a-layout-sider>
+    <a-layout>
+      <!-- <a-layout-header style="background: #fff; padding: 0" /> -->
+      <a-layout-content style="margin: 0 16px">
+        <a-breadcrumb style="margin: 16px 0">
+          <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+        </a-breadcrumb>
+        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+          <router-view />
+        </div>
+      </a-layout-content>
+      <a-layout-footer style="text-align: center"> StrongTeam ©2020 All rights reserved </a-layout-footer>
+    </a-layout>
+  </a-layout>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+export default {
+  data() {
+    return {
+      collapsed: false
+    };
   }
+};
+</script>
+
+<style lang="less">
+#components-layout-demo-side .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
 }
 </style>

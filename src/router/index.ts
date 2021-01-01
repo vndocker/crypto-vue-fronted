@@ -1,14 +1,15 @@
 import Vue from 'vue';
+import Component from 'vue-class-component';
 import VueRouter, { RouteConfig } from 'vue-router';
-import Home from '../views/Home.vue';
+import Dashboard from '../views/Dashboard.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Dashboard',
+    component: Dashboard
   },
   {
     path: '/about',
@@ -25,5 +26,15 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+const isAuthenticated = true;
+router.beforeEach((to, from, next) => {
+  console.log('ROUTING \nFrom: %o \nTo: %o', from, to);
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' });
+  else next();
+});
+
+// Register the router hooks with their names
+Component.registerHooks(['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUpdate']);
 
 export default router;

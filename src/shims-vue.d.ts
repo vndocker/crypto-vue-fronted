@@ -3,6 +3,8 @@ declare module '*.vue' {
   export default Vue;
 }
 
+declare let $_: any;
+
 interface MarketToken {
   title: string;
   value: number;

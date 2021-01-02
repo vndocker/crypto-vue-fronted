@@ -1,3 +1,4 @@
-import MarketPieChart from './MarketPieChart.vue';
+import MarketChart from './MarketChart.vue';
+import MarketChartDetail from './MarketChartDetail.vue';
 
-export { MarketPieChart };
+export { MarketChart, MarketChartDetail };

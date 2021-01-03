@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { MarketChart, MarketChartDetail } from '@/shared/components';
-import env from '@/vue.config';
+import { Component, Vue } from "vue-property-decorator";
+import { MarketChart, MarketChartDetail } from "@/shared/components";
+import env from "@/vue.config";
 
 @Component({
   components: {
@@ -22,31 +22,32 @@ import env from '@/vue.config';
 })
 export default class Dashboard extends Vue {
   buyIn = {
-    title: 'Buy In',
+    title: "Buy In",
     value: 2.32,
-    unit: 'BTC',
+    unit: "BTC",
     pairValue: 10000,
-    pairUnit: 'USD'
+    pairUnit: "USD"
   };
   currentValue = {
-    title: 'Current Value',
+    title: "Current Value",
     value: 11.45,
-    unit: 'BTC',
+    unit: "BTC",
     pairValue: 98890,
-    pairUnit: 'USD'
+    pairUnit: "USD"
   };
   created() {
-    console.log('Connect sails socket ...');
-    this.$io.sails.connect().on('connect', () => {
-      console.log('Sails socket is now connected');
-      if (this.$io.socket && this.$io.socket.isConnected()) {
-        console.log('subscribe to market');
-        this.$io.socket.on('socket.market.data.update', (message: { data: MarketPairToken[] }) => {
-          console.log('New socket update data', message.data);
+    console.log("Connect sails socket ...");
+    this.$io.sails.connect().on("connect", () => {
+      console.log("Sails socket is now connected");
+      console.log("Subscribe to market");
+      this.$io.socket.on(
+        "socket.market.data.update",
+        (message: { data: MarketPairToken[] }) => {
+          console.log("New socket update data", message.data);
           this.currentValue = this.$_.first(message.data);
           this.buyIn = this.$_.last(message.data);
-        });
-      }
+        }
+      );
     });
   }
   destroy() {

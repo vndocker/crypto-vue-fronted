@@ -29,8 +29,8 @@ import { formatCurrency, formatCurrencyZeroFaction } from '@/utils/common.utils'
 
 @Component({})
 export default class MarketPieChart extends Vue {
-  @Prop() private buyIn!: MarketToken;
-  @Prop() private currentValue!: MarketToken;
+  @Prop() private buyIn!: MarketPairToken;
+  @Prop() private currentValue!: MarketPairToken;
 
   get currentPairValueText() {
     return formatCurrencyZeroFaction(this._.get(this.currentValue, 'pairValue', 0), this._.get(this.currentValue, 'pairValueUnit', 'USD'));

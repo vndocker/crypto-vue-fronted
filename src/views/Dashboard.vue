@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { MarketChart, MarketChartDetail } from '@/components';
+import { MarketChart, MarketChartDetail } from '@/shared/components';
 import env from '@/vue.config';
 
 @Component({
@@ -35,43 +35,20 @@ export default class Dashboard extends Vue {
     pairValue: 98890,
     pairUnit: 'USD'
   };
-  mounted() {
+  created() {
     console.log('Connect sails socket ...');
     this.$io.sails.connect().on('connect', () => {
       console.log('Sails socket is now connected');
+      if (this.$io.socket && this.$io.socket.isConnected()) {
+        console.log('subscribe to market');
+        this.$io.socket.on('socket.market.data.update', (message: { data: MarketPairToken[] }) => {
+          console.log('New socket update data', message.data);
+          this.currentValue = this.$_.first(message.data);
+          this.buyIn = this.$_.last(message.data);
+        });
+      }
     });
-
-    if (this.$io.socket.isConnected()) {
-      this.$io.socket.post('/chat', { message: 'test1 ' });
-      window.io.socket.get('/chat', function serverResponded(body: any, JWR: any) {
-        // body === JWR.body
-        console.log('Sails responded with: ', body);
-        console.log('with headers: ', JWR.headers);
-        console.log('and with status code: ', JWR.statusCode);
-        window.io.socket.post('/chat', { message: 'test1 ' });
-        window.io.socket.post('/message', { message: 'test2 ' });
-      });
-
-      console.log('subscribe to message');
-      this.$io.socket.on('message', (data: any) => {
-        console.log('msg--> ', data);
-      });
-
-      console.log('subscribe to chat');
-      this.$io.socket.on('chat', (data: any) => {
-        console.log('chat--> ', data);
-      });
-
-      this.$io.socket.get('/chat', function serverResponded(body: any, JWR: any) {
-        console.log('Sails responded with: ', body);
-        console.log('with headers: ', JWR.headers);
-        console.log('and with status code: ', JWR.statusCode);
-        window.io.socket.post('/chat', { message: 'test1 ' });
-        window.io.socket.post('/message', { message: 'test2 ' });
-      });
-    }
   }
-
   destroy() {
     if (this.$io.socket) {
       this.$io.socket.removeAllListeners();

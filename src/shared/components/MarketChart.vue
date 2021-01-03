@@ -16,8 +16,8 @@ import { formatCurrency, formatCurrencyZeroFaction } from '@/utils/common.utils'
   }
 })
 export default class MarketPieChart extends Vue {
-  @Prop() private buyIn!: MarketToken;
-  @Prop() private currentValue!: MarketToken;
+  @Prop() private buyIn!: MarketPairToken;
+  @Prop() private currentValue!: MarketPairToken;
 
   get chartOptions() {
     return {
@@ -82,8 +82,9 @@ a {
 </style>
 <style lang="less">
 @import './highcharts.css';
+@import '../styles/screens.less';
 .market-pie-chart {
-  .highcharts-credits {
+  @media @phone {
     display: none;
   }
   .inner-chart-container {

@@ -3,7 +3,7 @@ declare module '*.vue' {
   export default Vue;
 }
 
-interface MarketToken {
+interface MarketPairToken {
   title: string;
   value: number;
   unit: string;

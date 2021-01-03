@@ -3,12 +3,14 @@ declare module '*.vue' {
   export default Vue;
 }
 
-declare let $_: any;
-
-interface MarketToken {
+interface MarketPairToken {
   title: string;
   value: number;
   unit: string;
   pairValue: number;
   pairUnit: string;
+}
+
+interface Window {
+  io: any /* Refs: sailjs/assets/dependencies/sails.io.js */;
 }

@@ -3,25 +3,21 @@
     <a-layout-sider v-model="collapsed" collapsible>
       <div class="logo" />
       <a-menu theme="dark" :default-selected-keys="['dashboard']" mode="inline">
-        <a-menu-item key="dashboard" @click="$router.replace('/')">
-          <a-icon type="pie-chart" />
-          <span>Dashboard</span>
-        </a-menu-item>
-        <a-sub-menu key="user">
-          <span slot="title"><a-icon type="user" /><span>User</span></span>
-          <a-menu-item key="3"> Tom </a-menu-item>
-          <a-menu-item key="4"> Bill </a-menu-item>
-          <a-menu-item key="5"> Alex </a-menu-item>
+        <a-sub-menu
+          v-for="menu in menuList"
+          :key="menu.key"
+          :disabled="$route.path === menu.path"
+          @titleClick="menu.path && $router.replace(menu.path)"
+        >
+          <span v-if="menu.title" slot="title"
+            ><a-icon :type="menu.icon" />
+            <span>{{ menu.title }}</span>
+          </span>
+          <a-menu-item v-for="subMenu in menu.subMenu" :key="subMenu.key" @click="$router.replace(subMenu.path)">
+            <a-icon v-if="subMenu.icon" :type="subMenu.icon" />
+            <span>{{ subMenu.title }}</span>
+          </a-menu-item>
         </a-sub-menu>
-        <a-sub-menu key="team">
-          <span slot="title"><a-icon type="team" /><span>Team</span></span>
-          <a-menu-item key="6"> Team 1 </a-menu-item>
-          <a-menu-item key="8"> Team 2 </a-menu-item>
-        </a-sub-menu>
-        <a-menu-item key="file" @click="$router.push('/about')">
-          <a-icon type="file" />
-          <span>File</span>
-        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -45,6 +41,54 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({})
 export default class Dashboard extends Vue {
   collapsed = true;
+  menuList = [
+    {
+      menuKey: 'at-glance',
+      path: '/',
+      title: 'Dashboard',
+      icon: 'pie-chart',
+      subMenu: []
+    },
+    {
+      menuKey: 'user',
+      title: 'User',
+      icon: 'user',
+      subMenu: [
+        {
+          key: 'team-01',
+          path: '/team-01',
+          title: 'Team 1'
+        },
+        {
+          key: 'team-02',
+          path: '/team-02',
+          title: 'Team 2'
+        }
+      ]
+    },
+    {
+      menuKey: 'team',
+      title: 'Team',
+      icon: 'team',
+      subMenu: [
+        {
+          key: 'user-01',
+          path: '/user-01',
+          title: 'Tom'
+        },
+        {
+          key: 'user-02',
+          path: '/user-02',
+          title: 'Bill'
+        },
+        {
+          key: 'user-03',
+          path: '/user-03',
+          title: 'Alex'
+        }
+      ]
+    }
+  ];
 }
 </script>
 

@@ -1,17 +1,18 @@
 <template>
   <section class="section-body">
     <div class="flex-item left-section">
-      <MarketChart :buyIn="buyIn" :currentValue="currentValue" ref="highcharts" />
+      <MarketChart :buy-in="buyIn" :current-value="currentValue" />
     </div>
     <div class="flex-item right-section">
-      <MarketChartDetail :buyIn="buyIn" :currentValue="currentValue" />
+      <MarketChartDetail :buy-in="buyIn" :current-value="currentValue" />
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { MarketChart, MarketChartDetail } from '@/components';
+import { Component, Vue } from "vue-property-decorator";
+import { MarketChart, MarketChartDetail } from "@/shared/components";
+import env from "@/vue.config";
 
 @Component({
   components: {
@@ -20,69 +21,39 @@ import { MarketChart, MarketChartDetail } from '@/components';
   }
 })
 export default class Dashboard extends Vue {
-  timer = 0;
   buyIn = {
-    title: 'Buy In',
+    title: "Buy In",
     value: 2.32,
-    unit: 'BTC',
+    unit: "BTC",
     pairValue: 10000,
-    pairUnit: 'USD'
+    pairUnit: "USD"
   };
   currentValue = {
-    title: 'Current Value',
+    title: "Current Value",
     value: 11.45,
-    unit: 'BTC',
+    unit: "BTC",
     pairValue: 98890,
-    pairUnit: 'USD'
+    pairUnit: "USD"
   };
-  //  sockets() {
-  //       connect: function () {
-  //           console.log('socket connected')
-  //       },
-  //       customEmit: function (data) {
-  //           console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-  //       }
-  //   }
-  mounted() {
-    this.$socket.on('connect', () => {
-      console.log('Socket connected');
-
-      this.sockets.subscribe('pong', data => {
-        console.log('subcribe pong: ', data);
-      });
-      this.$socket.on('pong', (msg: MarketToken) => {
-        console.log('msg pong: ', msg);
-      });
+  created() {
+    console.log("Connect sails socket ...");
+    this.$io.sails.connect().on("connect", () => {
+      console.log("Sails socket is now connected");
+      console.log("Subscribe to market");
+      this.$io.socket.on(
+        "socket.market.data.update",
+        (message: { data: MarketPairToken[] }) => {
+          console.log("New socket update data", message.data);
+          this.currentValue = this.$_.first(message.data);
+          this.buyIn = this.$_.last(message.data);
+        }
+      );
     });
-
-    this.timer = setInterval(() => {
-      // this.buyIn = {
-      //   title: 'Buy In',
-      //   value: this._.random(51, 52),
-      //   unit: 'BTC',
-      //   pairValue: this._.random(1000, 10000),
-      //   pairUnit: 'USD',
-      // };
-      // this.currentValue = {
-      //   title: 'Current Value',
-      //   value: this._.random(52, 53),
-      //   unit: 'BTC',
-      //   pairValue: this._.random(10, 12),
-      //   pairUnit: 'USD',
-      // };
-      console.log('sent ping');
-      this.$socket.emit('ping', {
-        date: Date.now()
-      });
-    }, 1000);
   }
-
   destroy() {
-    if (this.timer) {
-      clearInterval(this.timer);
+    if (this.$io.socket) {
+      this.$io.socket.removeAllListeners();
     }
-    this.sockets.unsubscribe('pong');
-    this.$socket.disconnect();
   }
 }
 </script>

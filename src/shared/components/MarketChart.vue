@@ -16,8 +16,8 @@ import { formatCurrency, formatCurrencyZeroFaction } from '@/utils/common.utils'
   }
 })
 export default class MarketPieChart extends Vue {
-  @Prop() private buyIn!: MarketToken;
-  @Prop() private currentValue!: MarketToken;
+  @Prop() private buyIn!: MarketPairToken;
+  @Prop() private currentValue!: MarketPairToken;
 
   get chartOptions() {
     return {
@@ -66,9 +66,6 @@ export default class MarketPieChart extends Vue {
     };
   }
 
-  // @Watch('currentValue') // , { immediate: true, deep: true })
-  // listenCurrentValue(val: MarketToken, oldVal: MarketToken) {}
-
   getCurrentPairValueText() {
     return formatCurrency(this._.get(this.currentValue, 'pairValue', 0), this._.get(this.currentValue, 'pairValueUnit', 'USD'));
   }
@@ -78,7 +75,6 @@ export default class MarketPieChart extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 a {
   color: #42b983;
@@ -86,8 +82,9 @@ a {
 </style>
 <style lang="less">
 @import './highcharts.css';
+@import '../styles/screens.less';
 .market-pie-chart {
-  .highcharts-credits {
+  @media @phone {
     display: none;
   }
   .inner-chart-container {

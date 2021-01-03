@@ -5,6 +5,7 @@ export const chartConfig = {
     plotShadow: false,
     styledMode: true
   },
+  credits: false,
   defs: {
     linearGradient1: {
       id: 'linear1',
@@ -78,5 +79,18 @@ export const chartConfig = {
       center: ['50%', '50%'],
       size: '100%'
     }
+  },
+  responsive: {
+    rules: [
+      {
+        condition: {
+          maxWidth: 500
+        },
+        chartOptions: {
+          title: false,
+          subtitle: false
+        }
+      }
+    ]
   }
 };

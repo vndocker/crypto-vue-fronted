@@ -44,16 +44,16 @@ export default class Dashboard extends Vue {
   //       }
   //   }
   mounted() {
-    this.$socket.on('connect', () => {
-      console.log('Socket connected');
+    // this.$socket.on('connect', () => {
+    //   console.log('Socket connected');
 
-      this.sockets.subscribe('pong', data => {
-        console.log('subcribe pong: ', data);
-      });
-      this.$socket.on('pong', (msg: MarketToken) => {
-        console.log('msg pong: ', msg);
-      });
-    });
+    //   this.sockets.subscribe('hello', data => {
+    //     console.log('subcribe hello: ', data);
+    //   });
+    //   this.$socket.on('hello', (msg: any) => {
+    //     console.log('msg hello: ', msg);
+    //   });
+    // });
 
     this.timer = setInterval(() => {
       // this.buyIn = {
@@ -70,10 +70,10 @@ export default class Dashboard extends Vue {
       //   pairValue: this._.random(10, 12),
       //   pairUnit: 'USD',
       // };
-      console.log('sent ping');
-      this.$socket.emit('ping', {
-        date: Date.now()
-      });
+      console.log('sent hello');
+      // this.$socket.emit('hello', {
+      //   date: Date.now()
+      // });
     }, 1000);
   }
 
@@ -81,8 +81,8 @@ export default class Dashboard extends Vue {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.sockets.unsubscribe('pong');
-    this.$socket.disconnect();
+    // this.sockets.unsubscribe('hello');
+    // this.$socket.disconnect();
   }
 }
 </script>

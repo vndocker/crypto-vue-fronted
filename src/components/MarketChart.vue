@@ -66,9 +66,6 @@ export default class MarketPieChart extends Vue {
     };
   }
 
-  // @Watch('currentValue') // , { immediate: true, deep: true })
-  // listenCurrentValue(val: MarketToken, oldVal: MarketToken) {}
-
   getCurrentPairValueText() {
     return formatCurrency(this._.get(this.currentValue, 'pairValue', 0), this._.get(this.currentValue, 'pairValueUnit', 'USD'));
   }
@@ -78,7 +75,6 @@ export default class MarketPieChart extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 a {
   color: #42b983;

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Component from 'vue-class-component';
+// import Component from 'vue-class-component';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
 
@@ -27,14 +27,7 @@ const router = new VueRouter({
   routes
 });
 
-const isAuthenticated = true;
-router.beforeEach((to, from, next) => {
-  console.log('ROUTING \nFrom: %o \nTo: %o', from, to);
-  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' });
-  else next();
-});
-
 // Register the router hooks with their names
-Component.registerHooks(['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUpdate']);
+// Component.registerHooks(['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUpdate']);
 
 export default router;

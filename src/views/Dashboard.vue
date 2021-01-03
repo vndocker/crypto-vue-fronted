@@ -1,10 +1,10 @@
 <template>
   <section class="section-body">
     <div class="flex-item left-section">
-      <MarketChart :buyIn="buyIn" :currentValue="currentValue" ref="highcharts" />
+      <MarketChart :buy-in="buyIn" :current-value="currentValue" />
     </div>
     <div class="flex-item right-section">
-      <MarketChartDetail :buyIn="buyIn" :currentValue="currentValue" />
+      <MarketChartDetail :buy-in="buyIn" :current-value="currentValue" />
     </div>
   </section>
 </template>
@@ -12,6 +12,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { MarketChart, MarketChartDetail } from '@/components';
+import env from '@/vue.config';
 
 @Component({
   components: {
@@ -20,7 +21,6 @@ import { MarketChart, MarketChartDetail } from '@/components';
   }
 })
 export default class Dashboard extends Vue {
-  timer = 0;
   buyIn = {
     title: 'Buy In',
     value: 2.32,
@@ -35,54 +35,47 @@ export default class Dashboard extends Vue {
     pairValue: 98890,
     pairUnit: 'USD'
   };
-  //  sockets() {
-  //       connect: function () {
-  //           console.log('socket connected')
-  //       },
-  //       customEmit: function (data) {
-  //           console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-  //       }
-  //   }
   mounted() {
-    // this.$socket.on('connect', () => {
-    //   console.log('Socket connected');
+    console.log('Connect sails socket ...');
+    this.$io.sails.connect().on('connect', () => {
+      console.log('Sails socket is now connected');
+    });
 
-    //   this.sockets.subscribe('hello', data => {
-    //     console.log('subcribe hello: ', data);
-    //   });
-    //   this.$socket.on('hello', (msg: any) => {
-    //     console.log('msg hello: ', msg);
-    //   });
-    // });
+    if (this.$io.socket.isConnected()) {
+      this.$io.socket.post('/chat', { message: 'test1 ' });
+      window.io.socket.get('/chat', function serverResponded(body: any, JWR: any) {
+        // body === JWR.body
+        console.log('Sails responded with: ', body);
+        console.log('with headers: ', JWR.headers);
+        console.log('and with status code: ', JWR.statusCode);
+        window.io.socket.post('/chat', { message: 'test1 ' });
+        window.io.socket.post('/message', { message: 'test2 ' });
+      });
 
-    this.timer = setInterval(() => {
-      // this.buyIn = {
-      //   title: 'Buy In',
-      //   value: this._.random(51, 52),
-      //   unit: 'BTC',
-      //   pairValue: this._.random(1000, 10000),
-      //   pairUnit: 'USD',
-      // };
-      // this.currentValue = {
-      //   title: 'Current Value',
-      //   value: this._.random(52, 53),
-      //   unit: 'BTC',
-      //   pairValue: this._.random(10, 12),
-      //   pairUnit: 'USD',
-      // };
-      console.log('sent hello');
-      // this.$socket.emit('hello', {
-      //   date: Date.now()
-      // });
-    }, 1000);
+      console.log('subscribe to message');
+      this.$io.socket.on('message', (data: any) => {
+        console.log('msg--> ', data);
+      });
+
+      console.log('subscribe to chat');
+      this.$io.socket.on('chat', (data: any) => {
+        console.log('chat--> ', data);
+      });
+
+      this.$io.socket.get('/chat', function serverResponded(body: any, JWR: any) {
+        console.log('Sails responded with: ', body);
+        console.log('with headers: ', JWR.headers);
+        console.log('and with status code: ', JWR.statusCode);
+        window.io.socket.post('/chat', { message: 'test1 ' });
+        window.io.socket.post('/message', { message: 'test2 ' });
+      });
+    }
   }
 
   destroy() {
-    if (this.timer) {
-      clearInterval(this.timer);
+    if (this.$io.socket) {
+      this.$io.socket.removeAllListeners();
     }
-    // this.sockets.unsubscribe('hello');
-    // this.$socket.disconnect();
   }
 }
 </script>

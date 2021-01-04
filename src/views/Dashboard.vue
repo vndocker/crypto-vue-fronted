@@ -12,7 +12,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { MarketChart, MarketChartDetail } from "@/shared/components";
-import env from "@/vue.config";
 
 @Component({
   components: {
@@ -35,6 +34,7 @@ export default class Dashboard extends Vue {
     pairValue: 98890,
     pairUnit: "USD"
   };
+
   created() {
     console.log("Connect sails socket ...");
     this.$io.sails.connect().on("connect", () => {
@@ -50,6 +50,7 @@ export default class Dashboard extends Vue {
       );
     });
   }
+
   destroy() {
     if (this.$io.socket) {
       this.$io.socket.removeAllListeners();
@@ -65,6 +66,7 @@ export default class Dashboard extends Vue {
   justify-content: space-between;
   align-items: center;
 }
+
 .flex-item {
   flex: 1;
 }

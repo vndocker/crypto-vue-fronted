@@ -1,28 +1,19 @@
-import Vue from 'vue';
+import Vue from "vue";
+import { Divider, Icon, Layout, Menu, message, Slider } from "ant-design-vue";
+import VueLodash from "vue-lodash";
 import {
-  //
-  Menu,
-  Layout,
-  Slider,
-  Icon,
-  message,
-  Divider
-} from 'ant-design-vue';
-import VueLodash from 'vue-lodash';
-import {
-  //
+  first,
   get,
   includes,
+  last,
   map,
+  merge,
   random,
   reduce,
   set,
-  first,
-  last,
   union,
-  merge,
   unionBy
-} from 'lodash';
+} from "lodash";
 
 Vue.use(Menu)
   .use(Layout)
@@ -33,7 +24,7 @@ Vue.use(Menu)
 Vue.prototype.$message = message;
 
 Vue.use(VueLodash, {
-  name: '$_',
+  name: "$_",
   lodash: {
     //
     map,

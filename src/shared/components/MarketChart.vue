@@ -5,10 +5,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Chart } from 'highcharts-vue';
-import { chartConfig } from './data';
-import { formatCurrency, formatCurrencyZeroFaction } from '@/utils/common.utils';
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { Chart } from "highcharts-vue";
+import { chartConfig } from "./chartConfig";
+import {
+  formatCurrency,
+  formatCurrencyZeroFaction
+} from "@/utils/common.utils";
 
 @Component({
   components: {
@@ -26,36 +29,40 @@ export default class MarketPieChart extends Vue {
         useHTML: true,
         text: `<div class="inner-chart-container">
         <div class="chart-inner-text current-value-text">
-        ${this._.get(this.currentValue, 'value', '')} ${this._.get(this.currentValue, 'unit', '')}
+        ${this._.get(this.currentValue, "value", "")} ${this._.get(
+          this.currentValue,
+          "unit",
+          ""
+        )}
           </div>
           <div class="current-pair-value-text">${this.getCurrentPairValueText()}</div>
           <div class="chart-inner-text buy-in-value-text">${this.getCurrentValuePairText()}</div>
           <div class="chart-inner-text buy-in-title">Buy In</h1>
       </div>`,
-        align: 'center',
+        align: "center",
         style: {
-          'text-align': 'center'
+          "text-align": "center"
         },
-        verticalAlign: 'middle',
+        verticalAlign: "middle",
         y: 16,
         x: 0
       },
       series: [
         {
-          type: 'pie',
-          name: 'Market',
-          innerSize: '80%',
+          type: "pie",
+          name: "Market",
+          innerSize: "80%",
           data: [
             {
-              name: 'Buy In',
-              y: this._.get(this.buyIn, 'value', 0),
+              name: "Buy In",
+              y: this._.get(this.buyIn, "value", 0),
               dataLabels: {
                 enabled: false
               }
             },
             {
-              name: 'Current Value',
-              y: this._.get(this.currentValue, 'value', 0),
+              name: "Current Value",
+              y: this._.get(this.currentValue, "value", 0),
               dataLabels: {
                 enabled: false
               }
@@ -67,10 +74,17 @@ export default class MarketPieChart extends Vue {
   }
 
   getCurrentPairValueText() {
-    return formatCurrency(this._.get(this.currentValue, 'pairValue', 0), this._.get(this.currentValue, 'pairValueUnit', 'USD'));
+    return formatCurrency(
+      this._.get(this.currentValue, "pairValue", 0),
+      this._.get(this.currentValue, "pairValueUnit", "USD")
+    );
   }
+
   getCurrentValuePairText() {
-    return formatCurrencyZeroFaction(this._.get(this.buyIn, 'pairValue', 0), this._.get(this.buyIn, 'pairValueUnit', 'USD'));
+    return formatCurrencyZeroFaction(
+      this._.get(this.buyIn, "pairValue", 0),
+      this._.get(this.buyIn, "pairValueUnit", "USD")
+    );
   }
 }
 </script>
@@ -81,12 +95,14 @@ a {
 }
 </style>
 <style lang="less">
-@import './highcharts.css';
-@import '../styles/screens.less';
+@import "./highcharts.css";
+@import "../styles/screens.less";
+
 .market-pie-chart {
   @media @phone {
     display: none;
   }
+
   .inner-chart-container {
     text-align: center;
     margin: 20px;
@@ -94,23 +110,28 @@ a {
     border-radius: 320px;
     height: 250px;
   }
+
   .highcharts-color-0 {
     fill: url(#linear1);
     stroke-width: 5;
   }
+
   .highcharts-color-1 {
     fill: url(#linear2);
     stroke-width: 5;
   }
+
   .current-pair-value-text {
     font-weight: 600;
     font-size: 1.5em;
     color: rgba(0, 0, 0, 0.8);
     margin-bottom: 1em;
   }
+
   .current-value-text {
     margin: 1em 0;
   }
+
   .chart-inner-text {
     opacity: 0.7;
     line-height: 1.5em;
